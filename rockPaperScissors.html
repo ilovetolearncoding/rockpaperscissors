@@ -3,116 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rock Paper Scissors</title>
+    <title>Rock Paper Scissors Game</title>
 </head>
 <body>
-  <html>
-    <body>
-      <script>
+
+    <h1>THE ROCK PAPER SCISSORS GAME</h1>
+    <h2>Score 5 Points To Win The Game</h2>
+    <h1>User Score:  <span class="u-score">0</span>  Vs  <span class="c-score">0</span>  :Computer Score</h1>
+    <h3>Make Your Choice Below</h3>
+    <p><h1 id="message"></h1></p>
+    <button class="button" id="rock">Rock</button>
+    <button class="button" id="paper">Paper</button>
+    <button class="button" id="scissors">Scissors</button>
+    <button class="reset-button" id="reset">Reset</button>
+
+    <script>
+
+        let userScore = 0;
+        let computerScore = 0;
+
+        let buttons = document.querySelectorAll(".button");
+        buttons.forEach ((button) => {
+            button.addEventListener("click",() => {
+                let userChoice = button.textContent;
+                let options = ["Rock", "Paper", "Scissors"];
+                let computerChoice = options[Math.floor(Math.random() *3)];
+                compareChoices(userChoice,computerChoice);
+                updateScoreboard(userScore, computerScore);
+                if (updateWinner(userScore, computerScore)){
+                    userScore = computerScore = 0;
+                    updateScoreboard(userScore, computerScore);
+                };
+                
 
 
-//1. show how to get computer choice
-//2.show how the game is played
-//3.show how the scores are computed and how winner emerges
-//4.play the game and show the winner or loser
-          let didPlayerWin = 0;
-          
-          function getComputerChoice(){
+            });           
+                        
+        } );
 
-            const outcomes = ["rock", "paper", "scissors"];
-            const randomIndex = Math.floor(Math.random() * outcomes.length);
-
-            return outcomes[randomIndex];
-          }
-          
-          
-          function playRound(playerChoice, getComputerChoice) {
-              // first convert the parameters to lowercase
-              let playerSelection = playerChoice.toLowerCase();
-              let computerSelection = getComputerChoice.toLowerCase();
-
-              if (playerSelection !== "rock" && 
-                  playerSelection !== "scissors" &&
-                  playerSelection !== "paper")
-                  {
-                    alert("Wrong input. Please choose between 'Rock', 'Paper' or 'Scissors'.");
-                    let redoChoice = prompt("What is your choice?").toLowerCase();
-                    playRound(redoChoice, getComputerChoice); 
-                  }
-
-              //Check for the scenerio where both player 
-              //and computer choose the same option. Return a "tie" there.
-              if (playerSelection === computerSelection) {
-                  didPlayerWin = 0;
-                  alert("It's a tie!");
-                  return ;
+        function compareChoices(userChoice, computerChoice) {
+                if (userChoice === computerChoice){
+                    document.querySelector("#message").textContent = "It is a tie!";
+                   
+                }
+                else if ((userChoice === "Rock" && computerChoice === "Scissors") 
+                || (userChoice === "Scissors" && computerChoice === "Paper")
+                || (userChoice === "Paper" && computerChoice === "Rock"))
+                {
+                    document.querySelector("#message").textContent = "You scored a point!";
+                    userScore++;
+            
+                }
+                else {
+                    document.querySelector("#message").textContent = "The computer scored a point!";
+                    computerScore++;
+                } 
             }
-            //check for all the possible scenerios where the player wins.
-            //If the player does not win, he then loses to the computer.
-            if ((playerSelection === "rock" && computerSelection === "scissors") ||
-                (playerSelection === "scissors" && computerSelection === "paper") ||
-                (playerSelection === "paper" && computerSelection === "rock")
-            ) {
-                didPlayerWin = 1;
-                alert("You win! " + playerSelection.charAt(0).toUpperCase() + playerSelection.slice(1) + " beats " + computerSelection + ".");
-                return;
-            } else {
-                didPlayerWin = 2;
-                alert("You lose! " + computerSelection.charAt(0).toUpperCase() + computerSelection.slice(1) + " beats " + playerSelection + ".");
-                return ;
+
+        function updateScoreboard(userScore, computerScore) {
+            document.querySelector(".u-score").textContent = userScore;
+            document.querySelector(".c-score").textContent = computerScore;
+        }
+
+        function updateWinner () {
+            if (userScore === 5 || computerScore === 5) {
+                let winner = userScore === 5 ? "Congratulations! You won the game." : "So sorry you lost! The Computer won the game.";
+                document.querySelector("#message").textContent = winner;
+                return true;
+                               
             }
-    }
+            else {
+                return false;
+            }
+           
+            
+        }        
 
+            let resetButton = document.querySelector('#reset');
+            resetButton.addEventListener('click', resetScores);
+            
+            function resetScores() {
+                userScore = 0;
+                computerScore = 0;
+                updateScoreboard(userScore, computerScore);
+                document.querySelector("#message").textContent = "";
+            }            
+
+    </script>
     
-    function replay()
-     {
-      let choice = prompt("Do you want to play again (Yes or No)?").toLowerCase();
-      if (choice === "yes")
-      {
-        playerScore = 0;
-        computerScore = 0;
-        game();
-        return;
-      }
-      else if (choice === "no")
-      {
-        alert("Thank you for playing! I hope you enjoyed the game.");
-        return;
-      }
-      else{
-        replay();
-      }
-     }
-   
-     
-    let playerScore = 0;
-    let computerScore = 0;
-
-     function game(){
-      for(let i = 1; i <= 2; i++){
-        let userChoice = prompt("What is your choice?").toLowerCase();
-
-        playRound(userChoice, getComputerChoice());
-
-        if (didPlayerWin === 1)  // PLAYER WINS
-        {
-          playerScore++;
-        }
-        else if (didPlayerWin === 2)  // COMPUTER WINS
-        {
-          computerScore++;
-        }
-       
-      }
-      alert("Game is over. You scored " + playerScore + " point(s) while the computer scored " + computerScore + " point(s).");
-      replay();
-
-      return;
-     }     
-    
-    game();
-    </script>       
-    </body>
-    </html>
 </body>
 </html>
